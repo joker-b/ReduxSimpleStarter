@@ -1,19 +1,32 @@
 //
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import SearchBar from './components/search_bar';
+import VideoList from './components/video_list';
 
-//import YTS from 'youtube-api-search';
+import YTSearch from 'youtube-api-search';
 
-// const API_KEY = 'AIzaSyAkRrZ5U1WL242T5hKbccIUlKlaEp-rUMA'
+const API_KEY = 'AIzaSyAkRrZ5U1WL242T5hKbccIUlKlaEp-rUMA';
 
-const App = () => {
-    return (
-        <div>
-            <SearchBar />
-        </div>
+
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { videos: []};
+        YTSearch({key: API_KEY, term: 'Contax'},
+        (videos) => {
+            this.setState({videos});
+        });
+    }
+    render() {
+        return (
+            <div>
+                <SearchBar />
+                <VideoList videos={this.state.videos}/>
+            </div>
         );
+    }
 };
 
 ReactDOM.render(<App />, document.querySelector('.container'));
